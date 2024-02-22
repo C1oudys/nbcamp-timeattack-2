@@ -9,9 +9,10 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
 
-  const signupHandler = async () => {
+  const signupHandler = async (e) => {
+    e.preventDefault();
     try{
-      const response = await authApi.post('/register', {id, password, nickname});
+      await authApi.post('/register', {id, password, nickname});
       alert("회원가입에 성공하였습니다. 로그인 페이지로 이동할게요");
       navigate("/login");
     } catch (error) {
@@ -26,11 +27,7 @@ const SignupPage = () => {
       <p>Signup page</p>
 
       <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          signupHandler();
-        }}
-      >
+        onSubmit={signupHandler}>
         <div>
           <label htmlFor="id">id</label>
           <input id="id" type="text" value={id} onChange={(e) => setId(e.target.value)}/>

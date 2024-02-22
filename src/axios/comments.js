@@ -7,15 +7,26 @@ const commentsAxios = axios.create({
 });
 
 commentsAxios.interceptors.request.use(
-    async config => {
-      try{
-        const response = awiat authApi.get('/user', {
-            headers: {
-                "Authorization": Bearer `${localStorage.getItem("accessToken")}`
-            }
-        })
-      }  
+  async (config) => {
+    try {
+      const response = await authApi.get("/user", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      });
+      if (response.data.success) {
+        return config;
+      } else {
+        throw new Error("인증 실패");
+      }
+    } catch (error) {
+      console.log("인증오류:", error);
+      return Promise.reject(error);
     }
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
 );
 
 commentsAxios.interceptors.response.use(
